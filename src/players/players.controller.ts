@@ -6,6 +6,7 @@ import {
   Put,
   HttpCode,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { PlayerDto } from './dtos/player.dto';
 import { PlayersService } from './players.service';
@@ -25,12 +26,21 @@ export class PlayersController {
 
   @Put(':id')
   @HttpCode(204)
-  updatePlayer(@Param() params, @Body() newPlayerData: PlayerDto) {
+  updatePlayer(
+    @Param() params: { id: string },
+    @Body() newPlayerData: PlayerDto,
+  ) {
     this.playersService.update(params.id, newPlayerData);
   }
 
   @Get()
   showPlayers(): Player[] {
     return this.playersService.showAll();
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  deletePlayer(@Param() params: { id: string }) {
+    this.playersService.delete(params.id);
   }
 }

@@ -38,11 +38,20 @@ export class PlayersService {
     }
   }
 
+  delete(player_id: string) {
+    const player = this.get(player_id);
+
+    if (player) {
+      const index = this.players.indexOf(player);
+      this.players.splice(index);
+    }
+  }
+
   showAll(): Player[] {
     return this.players;
   }
 
-  get(id: string): Player {
+  get(id: string): Player | undefined {
     return this.players.find((player) => player.id === id);
   }
 }
