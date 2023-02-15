@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Player } from './interfaces/player.interface';
-import { CreatePlayerDto } from './dtos/createPlayer.dto';
+import { PlayerDto } from './dtos/player.dto';
 import { randomUUID as uuid } from 'node:crypto';
 
 @Injectable()
 export class PlayersService {
-  private readonly players: Player[] = [];
+  private players: Player[] = [];
 
-  create(createPlayer: CreatePlayerDto): Player {
+  create(createPlayer: PlayerDto): Player {
     const { name, email, phoneNumber } = createPlayer;
 
     const player = {
@@ -23,5 +23,26 @@ export class PlayersService {
     this.players.push(player);
 
     return player;
+  }
+
+  update(player_id: string, updatePlayer: PlayerDto) {
+    const player = this.get(player_id);
+    const { phoneNumber, email, name } = updatePlayer;
+
+    if (player) {
+      player.name = name;
+      player.email = email;
+      player.phoneNumber = phoneNumber;
+
+      this.players.concat(player);
+    }
+  }
+
+  showAll(): Player[] {
+    return this.players;
+  }
+
+  get(id: string): Player {
+    return this.players.find((player) => player.id === id);
   }
 }
